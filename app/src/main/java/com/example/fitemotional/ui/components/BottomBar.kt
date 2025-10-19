@@ -11,6 +11,7 @@ import androidx.compose.runtime.getValue
 import androidx.compose.ui.graphics.Color
 import androidx.navigation.NavController
 import androidx.navigation.compose.currentBackStackEntryAsState
+import com.example.fitemotional.ui.theme.HeaderGradientStart
 
 data class BottomNavItem(
     val route: String,
@@ -28,19 +29,25 @@ fun BottomBar(navController: NavController) {
     )
 
     NavigationBar(
-        containerColor = Color.White,
-        contentColor = MaterialTheme.colorScheme.primary
+        containerColor = Color.White
     ) {
         val navBackStackEntry by navController.currentBackStackEntryAsState()
         val currentRoute = navBackStackEntry?.destination?.route
 
         items.forEach { item ->
+            val isSelected = currentRoute == item.route
+
             NavigationBarItem(
                 icon = item.icon,
-                label = { Text(item.title) },
-                selected = currentRoute == item.route,
+                label = {
+                    Text(
+                        text = item.title,
+                        color = if (isSelected) HeaderGradientStart else Color.Gray
+                    )
+                },
+                selected = isSelected,
                 onClick = {
-                    if (currentRoute != item.route) {
+                    if (!isSelected) {
                         navController.navigate(item.route) {
                             popUpTo("homeDiario") { inclusive = false }
                             launchSingleTop = true
@@ -48,9 +55,9 @@ fun BottomBar(navController: NavController) {
                     }
                 },
                 colors = NavigationBarItemDefaults.colors(
-                    selectedIconColor = MaterialTheme.colorScheme.primary,
-                    selectedTextColor = MaterialTheme.colorScheme.primary,
+                    selectedIconColor = HeaderGradientStart,
                     unselectedIconColor = Color.Gray,
+                    selectedTextColor = HeaderGradientStart,
                     unselectedTextColor = Color.Gray
                 )
             )

@@ -13,8 +13,9 @@ import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import androidx.navigation.NavController
 import com.example.fitemotional.R
+import com.example.fitemotional.ui.theme.HeaderGradientEnd
+import com.example.fitemotional.ui.theme.HeaderGradientStart
 
 @Composable
 fun DiarioHeader(
@@ -53,7 +54,7 @@ fun DiarioHeader(
                     fontSize = 22.sp,
                     fontWeight = FontWeight.Bold,
                     brush = Brush.linearGradient(
-                        listOf(Color(0xFF9C27B0), Color(0xFFE91E63))
+                        listOf(HeaderGradientStart, HeaderGradientEnd)
                     ),
                     shadow = Shadow(
                         color = Color.Black.copy(alpha = 0.2f),
