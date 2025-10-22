@@ -1,6 +1,5 @@
-package com.example.fitemotional.ui.components
+package com.example.fitemotional.ui.components.BNovaEntrada
 
-import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.*

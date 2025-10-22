@@ -1,17 +1,24 @@
 package com.example.fitemotional.navigation
 
-import BNovaEntrada
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
+import androidx.compose.ui.Modifier
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import com.example.fitemotional.ui.components.BottomBar
-import com.example.fitemotional.ui.screens.*
+import com.example.fitemotional.ui.screens.AHomeDiario
+import com.example.fitemotional.ui.screens.BNovaEntradaScreen
+import com.example.fitemotional.ui.screens.CEstatisticas
+import com.example.fitemotional.ui.screens.CPerfil
+import com.example.fitemotional.ui.viewmodel.BNovaEntradaViewModel
 
 @Composable
-fun NavGraph(startDestination: String = "homeDiario") {
+fun NavGraph(
+    startDestination: String = "homeDiario",
+    bNovaEntradaViewModel: BNovaEntradaViewModel
+) {
     val navController = rememberNavController()
 
     Scaffold(
@@ -20,12 +27,30 @@ fun NavGraph(startDestination: String = "homeDiario") {
         NavHost(
             navController = navController,
             startDestination = startDestination,
-            modifier = androidx.compose.ui.Modifier.padding(innerPadding)
+            modifier = Modifier.padding(innerPadding)
         ) {
-            composable("homeDiario") { AHomeDiario(navController) }
-            composable("novaEntrada") { BNovaEntrada(navController) }
-            composable("estatisticas") { CEstatisticas(navController) }
-            composable("perfil") { CPerfil(navController) }
+            // 🏠 Tela inicial do diário
+            composable("homeDiario") {
+                AHomeDiario(
+                    navController = navController,
+                    viewModel = bNovaEntradaViewModel
+                )
+            }
+
+            // ✍️ Tela de nova entrada (recebe o ViewModel)
+            composable("novaEntrada") {
+                BNovaEntradaScreen(viewModel = bNovaEntradaViewModel)
+            }
+
+            // 📊 Estatísticas
+            composable("estatisticas") {
+                CEstatisticas(navController)
+            }
+
+            // 👤 Perfil
+            composable("perfil") {
+                CPerfil(navController)
+            }
         }
     }
 }

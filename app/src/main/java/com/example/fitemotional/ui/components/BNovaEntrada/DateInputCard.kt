@@ -1,4 +1,4 @@
-package com.example.fitemotional.ui.components
+package com.example.fitemotional.ui.components.BNovaEntrada
 
 import android.app.DatePickerDialog
 import androidx.compose.foundation.layout.*

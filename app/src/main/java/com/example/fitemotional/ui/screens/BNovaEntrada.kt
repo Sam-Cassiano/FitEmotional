@@ -1,3 +1,5 @@
+package com.example.fitemotional.ui.screens
+
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
@@ -9,33 +11,41 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import androidx.navigation.NavController
-import com.example.fitemotional.ui.components.ActivitiesSelector
-import com.example.fitemotional.ui.components.DateInputCard
-import com.example.fitemotional.ui.components.IntensitySlider
-import com.example.fitemotional.ui.components.MoodSelector
+import com.example.fitemotional.ui.components.BNovaEntrada.ActivitiesSelector
+import com.example.fitemotional.ui.components.BNovaEntrada.DateInputCard
+import com.example.fitemotional.ui.components.BNovaEntrada.GratitudeCard
+import com.example.fitemotional.ui.components.BNovaEntrada.IntensitySlider
+import com.example.fitemotional.ui.components.BNovaEntrada.MoodOption
+import com.example.fitemotional.ui.components.BNovaEntrada.MoodSelector
+import com.example.fitemotional.ui.components.BNovaEntrada.NotesReflections
+import com.example.fitemotional.ui.components.BNovaEntrada.SaveEntryButton
 import com.example.fitemotional.ui.screens.DiarioHeader
+import com.example.fitemotional.ui.viewmodel.BNovaEntradaViewModel
 import java.time.LocalDate
 
 @Composable
-fun BNovaEntrada(navController: NavController) {
+fun BNovaEntradaScreen(
+    viewModel: BNovaEntradaViewModel // instância do ViewModel
+) {
+    // Estados principais da tela
     var selectedDate by remember { mutableStateOf(LocalDate.now()) }
-    var selectedMood by remember { mutableStateOf("") }
+    var selectedMood by remember { mutableStateOf<MoodOption?>(null) }
     var intensity by remember { mutableStateOf(5f) }
+    var selectedActivities by remember { mutableStateOf<List<String>>(emptyList()) }
+    var notes by remember { mutableStateOf("") }
+    var gratitude by remember { mutableStateOf("") }
 
-    // Estado da rolagem
     val scrollState = rememberScrollState()
 
     Column(
         modifier = Modifier
             .fillMaxSize()
-            .verticalScroll(scrollState) // ❗ torna a tela rolável
+            .verticalScroll(scrollState)
             .padding(horizontal = 16.dp, vertical = 8.dp),
         verticalArrangement = Arrangement.Top,
         horizontalAlignment = Alignment.Start
     ) {
         DiarioHeader()
-
         Spacer(modifier = Modifier.height(16.dp))
 
         Text(
@@ -55,31 +65,44 @@ fun BNovaEntrada(navController: NavController) {
 
         DateInputCard(
             initialDate = selectedDate,
-            onDateSelected = { newDate ->
-                selectedDate = newDate
-                println("📅 Data selecionada: $newDate")
-            }
+            onDateSelected = { selectedDate = it }
         )
 
         Spacer(modifier = Modifier.height(16.dp))
 
         MoodSelector { mood ->
-            selectedMood = mood.label
-            println("😄 Humor selecionado: ${mood.label}")
+            selectedMood = mood
         }
 
         Spacer(modifier = Modifier.height(16.dp))
 
         IntensitySlider { value ->
             intensity = value.toFloat()
-            println("🔥 Intensidade selecionada: ${value}/10")
         }
 
         Spacer(modifier = Modifier.height(16.dp))
 
         ActivitiesSelector { selected ->
-            println("✅ Atividades selecionadas: $selected")
+            selectedActivities = selected
         }
+
+        Spacer(modifier = Modifier.height(32.dp))
+
+        NotesReflections { notes = it }
+        GratitudeCard { gratitude = it }
+
+        Spacer(modifier = Modifier.height(16.dp))
+
+        // Botão de salvar com ViewModel instanciado corretamente
+        SaveEntryButton(
+            viewModel = viewModel,
+            selectedDate = selectedDate,
+            selectedMood = selectedMood?.label ?: "",
+            intensity = intensity,
+            selectedActivities = selectedActivities,
+            notes = notes,
+            gratitude = gratitude
+        )
 
         Spacer(modifier = Modifier.height(32.dp))
 
